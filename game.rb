@@ -1,9 +1,9 @@
-#encoding: euc-kr 
+ï»¿#encoding: utf-8
 
-dic = ["Ã¢¹®", "¹®Áö±â", "±â»çµµ"]
-      
 class Word
   def initialize(string)
+    
+    @dic = ["ì°½ë¬¸", "ë¬¸ì§€ê¸°", "ê¸°ì‚¬ë„"]
     @string = string
     @candidate = Array.new
   end
@@ -11,9 +11,15 @@ class Word
   def last_letter
     return @string[-1,1]
   end
+
+  def is_in?
+    return @dic.include?(@string)
+  end
 end
 
-W1 = Word.new("µµÁö»ç")
+w1 = Word.new("ê¸°ì‚¬ë„")
 
-p W1.last_letter
+p w1.last_letter
+
+puts w1.is_in?
 
