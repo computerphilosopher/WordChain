@@ -1,14 +1,19 @@
-# encoding: euc-kr 
-def last_letter(str)
-  return str[-1,1]
+#encoding: euc-kr 
+
+dic = ["창문", "문지기", "기사도"]
+      
+class Word
+  def initialize(string)
+    @string = string
+    @candidate = Array.new
+  end
+
+  def last_letter
+    return @string[-1,1]
+  end
 end
 
+W1 = Word.new("도지사")
 
-test = ["창문", "문지기", "기러기"]
-
-nw = last_letter(test[1])
-
-puts (nw) 
-
- 
+p W1.last_letter
 
