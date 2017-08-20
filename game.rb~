@@ -6,7 +6,7 @@ end
 
 test = ["창문", "문지기", "기러기"]
 
-nw = last_letter(test[1])
+nw = last_letter(test[0])
 
 puts (nw) 
 
