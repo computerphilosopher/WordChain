@@ -20,9 +20,11 @@ class Word
 
   def make_candidate
     @dic.each do |word|
-      puts word[0] == @user_word[-1]
+      if word[0] == @user_word[-1]
+        @candidate.push(word)
     end
   end
+end
 
   def show_candidate
     if @candidate == nil 
@@ -35,11 +37,11 @@ end
 
 
     
-f = File.open('test.txt')
+f = File.open('kor_dic.txt')
 dic = f.readlines
 
 
-w = Word.new(dic, "맥주")
+w = Word.new(dic, "김선달")
 w.make_candidate
 w.show_candidate
 
