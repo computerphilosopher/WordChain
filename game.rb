@@ -4,8 +4,10 @@ class Word
   def initialize(dic, string)
     
     @dic = dic
+    
     @user_word = string
-    @candidate = Array.new
+   
+    @candidate = []
   end
 
   def last_letter
@@ -18,9 +20,7 @@ class Word
 
   def make_candidate
     @dic.each do |word|
-      if word[0] == @user_word[-1,1]
-        @candidate.push(word)
-      end
+      puts word[0] == @user_word[-1]
     end
   end
 
@@ -28,21 +28,19 @@ class Word
     if @candidate == nil 
       puts "사전에 없습니다."
     else
-      @candidate.each do |word|
-      p word
-      end
+      puts @candidate
     end
   end
 end
 
 
-test = Array.new
     
-f = File.open('kor_dic.txt')
-a = f.readlines
-puts a[2]
+f = File.open('test.txt')
+dic = f.readlines
 
 
-
+w = Word.new(dic, "맥주")
+w.make_candidate
+w.show_candidate
 
 
