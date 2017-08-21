@@ -1,17 +1,16 @@
 ﻿#encoding: utf-8
 
+#chcp 65001로 인코딩 할 것 
+
 class Word
   def initialize(dic, string)
     
     @dic = dic
     
     @user_word = string
-   
+    puts @user_word
+ 
     @candidate = []
-  end
-
-  def last_letter
-    return @user_word[-1,1]
   end
 
   def in_dic?
@@ -36,13 +35,26 @@ end
 end
 
 
+class Killer
+  def initialize(dic)
+    @dic = dic
+    @last_letter = Array.new
+    @dic.each do |word|
+      puts word.reverse[2]
+      @last_letter.push(word.reverse[0])
+    end
+  end
+
+def show_last
+    puts @last_letter
+  end
+end
     
 f = File.open('kor_dic.txt')
 dic = f.readlines
 
+w = Word.new(dic, "날개")
 
-w = Word.new(dic, "김선달")
-w.make_candidate
-w.show_candidate
+k = Killer.new(dic)
 
 
