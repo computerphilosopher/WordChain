@@ -41,14 +41,22 @@ class Killer
     @last_letter = Array.new
     @dic.each do |word|
       puts word.reverse[2]
-      @last_letter.push(word.reverse[0])
+      @last_letter.push(word.reverse[2])
     end
   end
 
 def show_last
     puts @last_letter
   end
+
+def uniq_last
+  uniq_arr = @last_letter.uniq
+  f = File.open('uniq.txt', 'w'){
+    |file| file.write(uniq_arr.puts)
+  }
 end
+end
+
     
 f = File.open('kor_dic.txt')
 dic = f.readlines
@@ -56,5 +64,7 @@ dic = f.readlines
 w = Word.new(dic, "날개")
 
 k = Killer.new(dic)
+
+k.uniq_last
 
 
