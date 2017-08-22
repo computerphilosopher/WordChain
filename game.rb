@@ -1,5 +1,4 @@
 ﻿#encoding: utf-8
-
 #chcp 65001로 인코딩 할 것 
 
 class Word
@@ -43,7 +42,7 @@ class Killer
     
     @dic.each do |word|
       word.force_encoding("UTF-8")
-      @last_letter.push(word.reverse[2]) #word 뒤의 두 글자가 공백임
+      @last_letter.push(word.reverse[0]) 
       @first_letter.push(word[0])
     end
 
@@ -53,7 +52,7 @@ class Killer
   end
 
 def show_last
-    puts @last_letter
+    p @last_letter
   end
 
 def show_killer
@@ -83,7 +82,7 @@ end
 
 def killer_word
   @dic.each do |word|
-    if @last_letter.include?(word.reverse[2])
+    if @last_letter.include?(word.reverse[0])
         @killer_word.push(word)
     end
   end
@@ -92,20 +91,29 @@ end
 end
 
 
+def remove_newline(dic)
+  dic.each do |word|
+    word = word.chomp!
+    word = word.force_encoding("UTF-8")
+  end
+
+  return dic
+end
 
       
-  
-
-
-    
 f = File.open('kor_dic.txt')
 dic = f.readlines
+dic= remove_newline(dic)
+
+
+p dic
 
 w = Word.new(dic, "날개")
 
 k = Killer.new(dic)
 
 k.killer_last
+
 
 k.killer_word
 
