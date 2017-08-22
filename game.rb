@@ -8,7 +8,6 @@ class Word
     @dic = dic
     
     @user_word = string
-    puts @user_word
  
     @candidate = []
   end
@@ -39,25 +38,64 @@ class Killer
   def initialize(dic)
     @dic = dic
     @last_letter = Array.new
+    @first_letter = Array.new
+    @killer_word = Array.new
     
     @dic.each do |word|
       word.force_encoding("UTF-8")
       @last_letter.push(word.reverse[2]) #word 뒤의 두 글자가 공백임
+      @first_letter.push(word[0])
     end
+
+    #중복제거
+    @last_letter = @last_letter.uniq
+    @first_letter = @first_letter.uniq
   end
 
 def show_last
-    puts @uniq_letter
+    puts @last_letter
   end
 
-def uniq_last
-  @uniq_arr = @last_letter.uniq
+def show_killer
+  puts @killer_word
+  end
+
+def uniq_arr
+  @uniq_letter = @last_letter.uniq
+  
+  @uniq_first = @first_letter.uniq
+  end
+
+
+def killer_last
+
+  @last_letter.each do |letter|
+    if @first_letter.include?(letter)
+      @last_letter.delete(letter)
+    end
+  end
+
   File.open("uniq.txt","w:UTF-8"){ |f|
     f.puts @last_letter
   }
-  
-  end
+
 end
+
+def killer_word
+  @dic.each do |word|
+    if @last_letter.include?(word.reverse[2])
+        @killer_word.push(word)
+    end
+  end
+  
+end
+end
+
+
+
+      
+  
+
 
     
 f = File.open('kor_dic.txt')
@@ -67,5 +105,8 @@ w = Word.new(dic, "날개")
 
 k = Killer.new(dic)
 
-k.uniq_last
+k.killer_last
+
+k.killer_word
+
 k.show_last
