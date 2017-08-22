@@ -39,22 +39,24 @@ class Killer
   def initialize(dic)
     @dic = dic
     @last_letter = Array.new
+    
     @dic.each do |word|
-      puts word.reverse[2]
-      @last_letter.push(word.reverse[2])
+      word.force_encoding("UTF-8")
+      @last_letter.push(word.reverse[2]) #word 뒤의 두 글자가 공백임
     end
   end
 
 def show_last
-    puts @last_letter
+    puts @uniq_letter
   end
 
 def uniq_last
-  uniq_arr = @last_letter.uniq
-  f = File.open('uniq.txt', 'w'){
-    |file| file.write(uniq_arr.puts)
+  @uniq_arr = @last_letter.uniq
+  File.open("uniq.txt","w:UTF-8"){ |f|
+    f.puts @last_letter
   }
-end
+  
+  end
 end
 
     
@@ -66,5 +68,4 @@ w = Word.new(dic, "날개")
 k = Killer.new(dic)
 
 k.uniq_last
-
-
+k.show_last
