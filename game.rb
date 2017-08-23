@@ -66,18 +66,8 @@ class Dictionary
   end
 end
 
-class Killer  
+class Killer_Dic < Dictionary  
 
-  def initialize(word_list, first_letter, last_letter)
-
-    @word_list = word_list
-    @last_letter = last_letter
-    @first_letter = first_letter
-
-    @killer_word = Array.new
-  end
-
-  
   def show_killer
     p @killer_word
   end
@@ -98,11 +88,8 @@ class Killer
 
   end
 
-  def show_last
-    p @last_letter
-  end
-
-  def killer_word
+ def killer_word
+   @killer_word = Array.new
     @word_list.each do |word|
       if @uniq_last.include?(word.reverse[0])
         @killer_word.push(word)
@@ -118,7 +105,8 @@ dic = Dictionary.new(txt)
 dic.reprocess
 dic.extract_letter
 
-k = Killer.new(dic.word_list, dic.first_letter, dic.last_letter)
+k = Killer_Dic.new(txt)
+k.extract_letter
 
 k.killer_last
 
