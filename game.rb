@@ -39,6 +39,7 @@ class Killer
     @last_letter = Array.new
     @first_letter = Array.new
     @killer_word = Array.new
+    @uniq_last = Array.new
     
     @dic.each do |word|
       word.force_encoding("UTF-8")
@@ -68,9 +69,11 @@ def uniq_arr
 
 def killer_last
 
+  @uniq_last = @last_letter
+
   @last_letter.each do |letter|
     if @first_letter.include?(letter)
-      @last_letter.delete(letter)
+      @uniq_last.delete(letter)
     end
   end
 
@@ -82,38 +85,37 @@ end
 
 def killer_word
   @dic.each do |word|
-    if @last_letter.include?(word.reverse[0])
+    if @uniq_last.include?(word.reverse[0])
         @killer_word.push(word)
     end
   end
-  
 end
 end
 
+class Dictionary
 
-def remove_newline(dic)
-  dic.each do |word|
+attr_reader :word_list
+def initialize
+  f = File.open('kor_dic.txt')
+  @word_list = f.readlines
+end
+
+
+def reprocess
+  @word_list.each do |word|
     word = word.chomp!
     word = word.force_encoding("UTF-8")
   end
-
-  return dic
+end
 end
 
-      
-f = File.open('kor_dic.txt')
-dic = f.readlines
-dic= remove_newline(dic)
 
+dic = Dictionary.new      
+dic.reprocess
 
-p dic
-
-w = Word.new(dic, "날개")
-
-k = Killer.new(dic)
+k = Killer.new(dic.word_list)
 
 k.killer_last
-
 
 k.killer_word
 
