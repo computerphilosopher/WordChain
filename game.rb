@@ -2,13 +2,15 @@
 #chcp 65001로 인코딩 할 것 
 
 class Word
-  def initialize(dic, string)
+  def initialize(dic, string, killer)
 
     @dic = dic
 
     @user_word = string
 
-    @candidate = []
+    @killer_dic = killer
+
+    @candidate = Array.new 
   end
 
   def in_dic?
@@ -29,6 +31,11 @@ class Word
     else
       puts @candidate
     end
+  end
+
+  def can_kill?
+    p @killer_dic & @candidate
+    
   end
 end
 
@@ -68,6 +75,8 @@ end
 
 class Killer_Dic < Dictionary  
 
+  attr_reader :killer_list
+
   def show_killer
     p @killer_word
   end
@@ -88,11 +97,11 @@ class Killer_Dic < Dictionary
 
   end
 
- def killer_word
-   @killer_word = Array.new
+  def killer_word
+    @killer_list = Array.new
     @word_list.each do |word|
       if @uniq_last.include?(word.reverse[0])
-        @killer_word.push(word)
+        @killer_list.push(word)
       end
     end
   end
@@ -107,11 +116,10 @@ dic.extract_letter
 
 k = Killer_Dic.new(txt)
 k.extract_letter
-
 k.killer_last
-
 k.killer_word
 
-k.show_last
 
-k.show_killer
+w = Word.new(dic.word_list, "날개", k.killer_list) 
+w.make_candidate
+w.can_kill?
