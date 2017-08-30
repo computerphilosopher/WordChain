@@ -56,7 +56,7 @@ class Dictionary
   def reprocess
     @word_list.each do |word|
       word = word.chomp!
-      word = word.force_encoding("UTF-8")
+      word = word.encode("UTF-8")
     end
   end
 
@@ -114,12 +114,20 @@ dic = Dictionary.new(txt)
 dic.reprocess
 dic.extract_letter
 
+p dic.word_list
+
 k = Killer_Dic.new(txt)
 k.extract_letter
 k.killer_last
 k.killer_word
 
+p "문자 입력: "
+user = gets.chomp!
+user = user.encode("utf-8")
 
-w = Word.new(dic.word_list, "날개", k.killer_list) 
+puts user
+
+
+w = Word.new(dic.word_list, "꼬리", k.killer_list) 
 w.make_candidate
 w.can_kill?
