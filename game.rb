@@ -11,6 +11,7 @@ class Word
     @killer_dic = killer
 
     @candidate = Array.new 
+
   end
 
   def in_dic?
@@ -19,7 +20,7 @@ class Word
 
   def make_candidate
     @dic.each do |word|
-      if word[0] == @user_word[-1]
+      if word[0] == @user_word.reverse[0]
         @candidate.push(word)
       end
     end
@@ -35,7 +36,7 @@ class Word
 
   def can_kill?
     p @killer_dic & @candidate
-    
+
   end
 end
 
@@ -75,7 +76,7 @@ end
 
 class Killer_Dic < Dictionary  
 
-  attr_reader :killer_list
+  attr_reader :killer_list, :uniq_last
 
   def show_killer
     p @killer_word
@@ -94,7 +95,6 @@ class Killer_Dic < Dictionary
     File.open("uniq.txt","w:UTF-8"){ |f|
       f.puts @uniq_last
     }
-
   end
 
   def killer_word
@@ -114,20 +114,15 @@ dic = Dictionary.new(txt)
 dic.reprocess
 dic.extract_letter
 
-p dic.word_list
 
 k = Killer_Dic.new(txt)
 k.extract_letter
 k.killer_last
 k.killer_word
 
-p "문자 입력: "
-user = gets.chomp!
-user = user.encode("utf-8")
-
-puts user
 
 
-w = Word.new(dic.word_list, "꼬리", k.killer_list) 
+w = Word.new(dic.word_list, "허가", k.killer_list) 
 w.make_candidate
 w.can_kill?
+#
