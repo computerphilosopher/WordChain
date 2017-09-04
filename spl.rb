@@ -9,11 +9,11 @@ class Jamo_split
   end
 
   def split 
-    syllable_start = 44032
+    syllable_start = 0xAC00
 
-    chosung_start = 4352
-    joongsung_start = 4449
-    jongsung_start = 4520
+    chosung_start = 0x1100 
+    joongsung_start = 0x1161 
+    jongsung_start = 0x11A8 
 
 
     @chosung_code = ((@unpacked[0]-syllable_start)/28)/21 + chosung_start
@@ -25,13 +25,19 @@ class Jamo_split
     @chosung = [@chosung_code]
     @joongsung = [@joongsung_code]
     @jongsung = [@jongsung_code]
-    
+
   end
 
   def repack
     @chosung = @chosung.pack("U*") 
     @joongsung = @joongsung.pack("U*")
     @jongsung = @jongsung.pack("U*")
+  end
+
+  def show_index
+    puts @chosung_code
+    puts @joongsung_code
+    puts @jongsung_code
   end
 end
 
@@ -43,6 +49,8 @@ test.split
 
 test.repack
 
-p test.chosung
-p test.joongsung
-p test.jongsung
+test.show_index
+
+puts [test.chosung, test.joongsung, test.jongsung]
+
+
