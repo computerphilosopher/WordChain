@@ -1,30 +1,48 @@
 ﻿#encode
 
-class String
+class Jamo_split 
+  attr_reader :chosung, :joongsung, :jongsung
 
   def initialize(input)
     @letter = input
-    @unicode = input.unpack("U*")[0]
+    @unpacked = input.unpack("U*")
   end
 
   def split 
-    start_point = 44032
-    @chosung = ((@unicode-start_point)/28)/21
+    syllable_start = 44032
 
-    @joongsung = (@unicode-start_point/28)%21
+    chosung_start = 4352
+    joongsung_start = 4449
+    jongsung_start = 4520
 
-    @jongsung = (@unicode-start_point/28)%28
+
+    @chosung_code = ((@unpacked[0]-syllable_start)/28)/21 + chosung_start
+
+    @joongsung_code = (@unpacked[0]-syllable_start/28)%21 + joongsung_start
+
+    @jongsung_code = (@unpacked[0]-syllable_start/28)%28 + jongsung_start
+
+    @chosung = [@chosung_code]
+    @joongsung = [@joongsung_code]
+    @jongsung = [@jongsung_code]
     
-    puts @chosung
-    puts @joongsung
-    puts @jongsung
   end
 
+  def repack
+    @chosung = @chosung.pack("U*") 
+    @joongsung = @joongsung.pack("U*")
+    @jongsung = @jongsung.pack("U*")
+  end
 end
 
 
 
 
-test = String.new('다') 
+test = Jamo_split.new('대') 
 test.split
 
+test.repack
+
+p test.chosung
+p test.joongsung
+p test.jongsung
