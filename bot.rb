@@ -1,4 +1,6 @@
 ﻿require './access_key'
+require './game'
+
 include Access_key
 
 client = Access_key.get_key

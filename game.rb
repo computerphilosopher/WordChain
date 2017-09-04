@@ -105,6 +105,7 @@ class Killer_Dic < Dictionary
       end
     end
   end
+
 end
 
 f = File.open('kor_dic.txt') 
@@ -124,5 +125,6 @@ k.killer_word
 
 w = Word.new(dic.word_list, "허가", k.killer_list) 
 w.make_candidate
-w.can_kill?
-#
+#w.can_kill?
+
+p 'ㄴ'.unpack("U*")

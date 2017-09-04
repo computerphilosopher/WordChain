@@ -1,0 +1,22 @@
+﻿#encode
+
+class String
+
+  def initialize(input)
+    @letter = input
+    @unicode = input.unpack("U*")[0]
+  end
+
+  def split
+    @chosung = ((@unicode-44032)/28)/21
+    p @chosung
+  end
+
+end
+
+
+
+
+test = String.new('다') 
+test.split
+
