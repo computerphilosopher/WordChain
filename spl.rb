@@ -1,32 +1,41 @@
-﻿#encode
-
+﻿
 class Jamo_split 
   attr_reader :chosung, :joongsung, :jongsung
 
   def initialize(input)
     @letter = input
     @unpacked = input.unpack("U*")
+
+    @syllable_start = 0xAC00
+    @hangul_index = @unpacked[0]-@syllable_start 
   end
 
-  def split 
-    syllable_start = 0xAC00
+
+  def get_chosung
 
     chosung_start = 0x1100 
-    joongsung_start = 0x1161 
-    jongsung_start = 0x11A8 
-
-
-    @chosung_code = ((@unpacked[0]-syllable_start)/28)/21 + chosung_start
-
-    @joongsung_code = (@unpacked[0]-syllable_start/28)%21 + joongsung_start
-
-    @jongsung_code = (@unpacked[0]-syllable_start/28)%28 + jongsung_start
+    @chosung_code = (@hangul_index/28/21) #+chosung_start
 
     @chosung = [@chosung_code]
-    @joongsung = [@joongsung_code]
-    @jongsung = [@jongsung_code]
 
   end
+  
+  def get_joongsung
+
+    joongsung_start = 0x1161 
+    @joongsung_code = ((@hangul_index-@jongsung_code)/28)%21
+
+    @joongsung = [@joongsung_code]
+
+  end
+
+  def get_jongsung
+
+    jongsung_start = 0x11A8 
+    @jongsung_code = (@hangul_index%28) #+jongsung_start
+    @jongsung = [@jongsung_code]
+  end
+
 
   def repack
     @chosung = @chosung.pack("U*") 
@@ -39,18 +48,21 @@ class Jamo_split
     puts @joongsung_code
     puts @jongsung_code
   end
+
+  def show_split
+    puts [@chosung, @joongsung, @jongsung]
+  end
 end
 
 
 
 
-test = Jamo_split.new('대') 
-test.split
-
+test = Jamo_split.new('때') 
+test.get_chosung
+test.get_jongsung
+test.get_joongsung
 test.repack
 
 test.show_index
-
-puts [test.chosung, test.joongsung, test.jongsung]
 
 
