@@ -54,16 +54,13 @@ class Jamo_split
   end
 end
 
+j = Jamo_split.new('라')
 
+j.get_chosung
+j.get_jungsung
+j.get_jongsung
 
+j.show_index
 
-test = Jamo_split.new('땜') 
-test.get_chosung
-test.get_jongsung
-test.get_jungsung
-test.repack
-
-test.show_index
-test.show_split
 
 

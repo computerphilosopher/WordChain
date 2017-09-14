@@ -105,8 +105,100 @@ class Killer_Dic < Dictionary
       end
     end
   end
-
 end
+
+class Jamo_split 
+  attr_reader :chosung, :jungsung, :jongsung, :chosung_code
+
+  def initialize(input)
+    @letter = input
+    @unpacked = input.unpack("U*")
+
+    @syllable_start = 0xAC00
+    @hangul_index = @unpacked[0]-@syllable_start 
+  end
+
+
+  def get_chosung
+
+    chosung_start = 0x1100 
+    @chosung_code = (@hangul_index/28/21)+chosung_start
+
+    @chosung = [@chosung_code]
+
+  end
+
+  def get_jungsung
+
+    jungsung_start = 0x1161 
+    @jungsung_code = ((@hangul_index/28)%21)+jungsung_start
+
+    @jungsung = [@jungsung_code]
+
+  end
+
+  def get_jongsung
+
+    jongsung_start = 0x11A8 
+    @jongsung_code = (@hangul_index%28)+jongsung_start-1
+    @jongsung = [@jongsung_code]
+  end
+
+
+  def repack
+    @chosung = @chosung.pack("U*") 
+    @jungsung = @jungsung.pack("U*")
+    @jongsung = @jongsung.pack("U*")
+  end
+
+  def show_index
+    puts @chosung_code
+    puts @jungsung_code
+    puts @jongsung_code
+  end
+
+  def show_split
+    puts [@chosung, @jungsung, @jongsung]
+  end
+end
+
+class Begining_sound
+  attr_reader :chosung
+
+
+  def initialize(word)
+    @word = word
+  end
+
+  def test
+    p @chosung
+  end
+
+  def split_letter
+    seperated_letter = Jamo_split.new(@word.reverse[0])
+
+    seperated_letter.get_chosung
+    seperated_letter.get_jungsung
+    seperated_letter.get_jongsung
+
+    seperated_letter.repack
+
+    @chosung = seperated_letter.chosung_code
+    @jungsung = seperated_letter.jungsung
+  end
+
+  def need_change?
+    if @chosung == 4357    
+      return true
+    else 
+      return false
+    end
+  end
+end
+
+
+
+
 
 f = File.open('kor_dic.txt') 
 txt = f.readlines
@@ -123,8 +215,13 @@ k.killer_word
 
 
 
-w = Word.new(dic.word_list, "허가", k.killer_list) 
-w.make_candidate
-#w.can_kill?
+b= Begining_sound.new('나')
+b.split_letter
 
-p 'ㄴ'.unpack("U*")
+b.test
+
+p b.need_change?
+
+
+
+
