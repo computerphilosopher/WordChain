@@ -83,7 +83,7 @@ class Killer_Dic < Dictionary
 
 	#첫 글자에 등장하지 않는 글자 추출
 	
-	def killer_last
+	def find_killer_last
 
 		@uniq_last = @last_letter
 
@@ -100,13 +100,17 @@ class Killer_Dic < Dictionary
 
 	#killer_last를 끝 글자로 하는 단어 추출
 
-	def killer_word
+	def find_killer_word
 		@killer_list = Array.new
 		@word_list.each do |word|
 			if @uniq_last.include?(word.reverse[0])
 				@killer_list.push(word)
 			end
 		end
+
+		File.open("killer.txt","w:UTF-8"){ |f|
+			f.puts @killer_list
+		}
 	end
 end
 
@@ -158,7 +162,7 @@ class Jamo_handler
 		p [detached].pack("U*")
 		return detached
 	end
-		
+
 
 	def show_index
 		puts @chosung_code
@@ -174,7 +178,7 @@ class Jamo_handler
 		head_letter = [detach_jongsung].pack("U*")
 
 		case head_letter
-		
+
 		when '녀'
 			return '여'
 		when '뇨'
@@ -183,7 +187,7 @@ class Jamo_handler
 			return '유'
 		when '니'
 			return '이'
-		
+
 		when '랴'
 			return '야'
 		when '려'
