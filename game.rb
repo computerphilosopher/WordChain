@@ -154,9 +154,9 @@ class Jamo_handler
 	end
 
 	def detach_jongsung 
-		p @unpacked[0] 
 		detached= @unpacked[0]-(@jongsung_code-4519)
 		p [detached].pack("U*")
+		return detached
 	end
 		
 
@@ -169,14 +169,57 @@ class Jamo_handler
 	def show_split
 		puts [@chosung, @jungsung, @jongsung]
 	end
+
+	def change_head_sound
+		head_letter = [detach_jongsung].pack("U*")
+
+		case head_letter
+		
+		when '녀'
+			return '여'
+		when '뇨'
+			return '요'
+		when '뉴'
+			return '유'
+		when '니'
+			return '이'
+		
+		when '랴'
+			return '야'
+		when '려'
+			return '여'
+		when '례'
+			return '예'
+		when '료'
+			return '요'
+		when '류'
+			return '유'
+		when '리'
+			return '이'
+
+		when '라'
+			return '나'
+		when '래'
+			return '내'
+		when '로'
+			return '노'
+		when '뢰'
+			return '뇌'
+		when '루'
+			return '누'
+		when '르'
+			return '느'
+
+		else return head_letter
+		end
+	end
 end
 
 
 #두음 법칙
 class Head_sound_converter < Jamo_handler
-	
+
 	def test
-		p @chosung
 	end
 
 end
@@ -195,9 +238,11 @@ end
 #k.killer_word
 
 
-
-b= Jamo_handler.new('람')
+b= Jamo_handler.new('램')
 b.get_chosung
 b.get_jungsung
 b.get_jongsung
-b.detach_jongsung
+
+a = b.change_head_sound
+p a
+
