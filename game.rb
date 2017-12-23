@@ -97,7 +97,6 @@ class Killer_Dic < Dictionary
 			f.puts @uniq_last
 		}
 	end
-
 	#killer_last를 끝 글자로 하는 단어 추출
 
 	def find_killer_word
@@ -117,19 +116,27 @@ end
 class Jamo_handler 
 	attr_reader :chosung, :jungsung, :jongsung, :chosung_code
 
+	SYLLABLE_START = 0xAC00
+	CHOSUNG_START = 0x1100 
+	JUNGSUNG_START = 0x1161 
+	JONGSUNG_START = 4520 
+	CONSONANT_START = 0x11A7 
+
 	def initialize(input)
 		@letter = input
 		@unpacked = input.unpack("U*")
 
-		@syllable_start = 0xAC00
-		@hangul_index = @unpacked[0]-@syllable_start 
+		@hangul_index = @unpacked[0]-SYLLABLE_START 
+
+		get_chosung()
+		get_jongsung()
+		get_jongsung()
 
 	end
 
 	def get_chosung
 
-		chosung_start = 0x1100 
-		@chosung_code = (@hangul_index/28/21)+chosung_start
+		@chosung_code = (@hangul_index/28/21)+CHOSUNG_START
 
 		@chosung = [@chosung_code]
 
@@ -137,8 +144,7 @@ class Jamo_handler
 
 	def get_jungsung
 
-		jungsung_start = 0x1161 
-		@jungsung_code = ((@hangul_index/28)%21)+jungsung_start
+		@jungsung_code = ((@hangul_index/28)%21)+JUNGSUNG_START
 
 		@jungsung = [@jungsung_code]
 
@@ -146,8 +152,7 @@ class Jamo_handler
 
 	def get_jongsung
 
-		jongsung_start = 0x11A8 
-		@jongsung_code = (@hangul_index%28)+jongsung_start-1
+		@jongsung_code = (@hangul_index%28)+JONGSUNG_START
 		@jongsung = [@jongsung_code]
 	end
 
@@ -158,7 +163,7 @@ class Jamo_handler
 	end
 
 	def detach_jongsung 
-		detached= @unpacked[0]-(@jongsung_code-4519)
+		detached= @unpacked[0]-(@jongsung_code-JONGSUNG_START)
 		p [detached].pack("U*")
 		return detached
 	end
@@ -175,53 +180,66 @@ class Jamo_handler
 	end
 
 	def change_head_sound
+		
 		head_letter = [detach_jongsung].pack("U*")
 
 		case head_letter
 
 		when '녀'
-			return '여'
+			changed_letter= '여'
 		when '뇨'
-			return '요'
+			changed_letter= '요'
 		when '뉴'
-			return '유'
+			changed_letter= '유'
 		when '니'
-			return '이'
+			changed_letter= '이'
 
 		when '랴'
-			return '야'
+			changed_letter= '야'
 		when '려'
-			return '여'
+			changed_letter= '여'
 		when '례'
-			return '예'
+			changed_letter= '예'
 		when '료'
-			return '요'
+			changed_letter= '요'
 		when '류'
-			return '유'
+			changed_letter= '유'
 		when '리'
-			return '이'
+			changed_letter= '이'
 
 		when '라'
-			return '나'
+			changed_letter= '나'
 		when '래'
-			return '내'
+			changed_letter= '내'
 		when '로'
-			return '노'
+			changed_letter= '노'
 		when '뢰'
-			return '뇌'
+			changed_letter= '뇌'
 		when '루'
-			return '누'
+			changed_letter= '누'
 		when '르'
-			return '느'
+			changed_letter= '느'
 
-		else return head_letter
+		else changed_letter=head_letter
 		end
+		changed_letter = attach_jongsung(changed_letter)
+		p [changed_letter].pack("U*")
+	end
+
+	def attach_jongsung(detached_letter)
+		jongsung = (@jongsung_code - JONGSUNG_START)
+		dl_index = detached_letter.unpack("U*")[0]
+		p dl_index
+		complete_letter= dl_index + jongsung 
+		p complete_letter 
+		return complete_letter 
 	end
 end
 
 
 #두음 법칙
 class Head_sound_converter < Jamo_handler
+
 
 	def test
 	end
@@ -242,11 +260,8 @@ end
 #k.killer_word
 
 
-b= Jamo_handler.new('램')
-b.get_chosung
-b.get_jungsung
-b.get_jongsung
+b= Jamo_handler.new('룩')
+b.change_head_sound
 
-a = b.change_head_sound
-p a
+#a = b.change_head_sound
 
