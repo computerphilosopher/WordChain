@@ -1,13 +1,13 @@
 class Word
-	def initialize(dic, string, killer)
+	def initialize(string)
 
-		@dic = dic
+		@dic = Dictionary.new 
 
 		@user_word = string
 
-		@killer_dic = killer
+		@killer_dic = Killer_Dic.new 
 
-		@candidate = Array.new 
+		@candidate = make_candidate 
 
 	end
 
@@ -18,9 +18,10 @@ class Word
 	def make_candidate
 		@dic.each do |word|
 			if word[0] == @user_word.reverse[0]
-				@candidate.push(word)
+				candidate.push(word)
 			end
 		end
+		return candidate
 	end
 
 	def show_candidate
@@ -59,6 +60,14 @@ class Dictionary
 		end
 	end
 
+	def except_one_letter
+		@word_list.each do |word|
+			if word.length==1
+				then @word_list.delete(word)
+			end
+		end
+	end
+
 	def extract_letter
 		
 		@word_list.each do |word|
@@ -70,6 +79,7 @@ class Dictionary
 
 	def show_last
 		p @last_letter
+		p @last_letter.length
 	end
 end
 
@@ -79,21 +89,23 @@ class Killer_Dic < Dictionary
 
 	def show_killer
 		p @killer_list
+
+	end
+
+	def show_uniq
+		p @uniq_last
 	end
 
 	#첫 글자에 등장하지 않는 글자 추출
 
 	def find_killer_last
 
-		@uniq_last = @last_letter
+		@uniq_last = @last_letter.dup
 
 		@uniq_last.each do |letter|
 			head_sound=Jamo_handler.new(letter)
 			head_sound.change_head_sound
-			if @first_letter.include?(letter)
-				@uniq_last.delete(letter)
-			else @first_letter.include?(head_sound.changed_letter)
-				p head_sound.changed_letter
+			if @first_letter.include?(head_sound.changed_letter)
 				@uniq_last.delete(letter)
 			end
 
@@ -163,7 +175,7 @@ class Jamo_handler
 
 	def detach_jongsung 
 		detached= @unpacked[0]-(@jongsung_code-JONGSUNG_START)
-		 
+
 		return [detached].pack("U*")
 
 	end
@@ -222,8 +234,8 @@ class Jamo_handler
 		else 
 			changed_letter=head_letter
 		end
-		
-		return attach_jongsung(changed_letter)
+
+		@changed_letter= attach_jongsung(changed_letter)
 	end
 
 	def attach_jongsung(detached_letter)
@@ -235,14 +247,15 @@ class Jamo_handler
 end
 
 
-#f = File.open("kor_dic.txt") 
-#txt = f.readlines
+f = File.open("kor_dic.txt") 
+txt = f.readlines()
 
-#k = Killer_Dic.new(txt)
-#k.reprocess
-#k.extract_letter
+k = Killer_Dic.new(txt)
+k.reprocess()
+k.except_one_letter()
+k.extract_letter()
 
-#k.find_killer_last
-#k.find_killer_word
-#k.show_killer
+k.find_killer_last()
+k.find_killer_word()
+k.show_killer()
 
