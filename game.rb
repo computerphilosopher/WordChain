@@ -42,7 +42,7 @@ end
 
 class Dictionary
 
-	attr_reader :word_list, :last_letter, :first_letter
+	#attr_reader :word_list, :last_letter, :first_letter
 	
 	def initialize(txt)
 
@@ -56,7 +56,7 @@ class Dictionary
 	def reprocess
 		@word_list.each do |word|
 			word = word.chomp!
-			word = word.encode("UTF-8")
+			word = word.encode!("UTF-8")
 		end
 	end
 
@@ -144,7 +144,8 @@ class Jamo_handler
 		get_jongsung()
 
 	end
-
+	
+	private
 	def get_chosung
 
 		@chosung_code = (@hangul_index/28/21)+CHOSUNG_START
@@ -247,15 +248,15 @@ class Jamo_handler
 end
 
 
-f = File.open("kor_dic.txt") 
-txt = f.readlines()
+#f = File.open("kor_dic.txt") 
+#txt = f.readlines()
 
-k = Killer_Dic.new(txt)
-k.reprocess()
-k.except_one_letter()
-k.extract_letter()
+#k = Killer_Dic.new(txt)
+#k.reprocess()
+#k.except_one_letter()
+#k.extract_letter()
 
-k.find_killer_last()
-k.find_killer_word()
-k.show_killer()
+#k.find_killer_last()
+#k.find_killer_word()
+#k.show_killer()
 
